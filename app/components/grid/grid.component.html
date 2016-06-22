@@ -1,6 +1,6 @@
-<div id="game-{{ gameSize }}">
+<div id="game-{{ size }}">
   <div class="grid-container">
-    <!--<div class="grid-cell" ng-repeat="cell in ngModel.grid track by $index"></div>-->
+    <div class="grid-cell" *ngFor="let cell of grid"></div>
   </div>
 
   <div class="tile-container">

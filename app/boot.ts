@@ -1,8 +1,9 @@
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { AppComponent } from './app.component'
+import { GridComponent } from './components/grid/grid.component'
 import { enableProdMode } from '@angular/core';
-import { GameService } from './services/game.service';
+import { GridService, GameService } from './services/index';
 
 enableProdMode();
 
-bootstrap(AppComponent, [GameService]);
+bootstrap(AppComponent, [GridService, GameService, GridComponent]);

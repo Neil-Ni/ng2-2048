@@ -1,5 +1,6 @@
 import { Component, HostListener }   from '@angular/core';
 import { GameService } from './services/game.service';
+import { GridComponent } from './components/grid/grid.component';
 
 enum Directions {
   LEFT = 37,
@@ -10,13 +11,14 @@ enum Directions {
 
 @Component({
   selector: 'my-app',
-  directives: [],
+  directives: [GridComponent],
   templateUrl: 'app/app.component.html'
 })
 
 export class AppComponent {
-
-  constructor(public game :GameService) {}
+  constructor(public game :GameService) {
+    this.game.newGame();
+  }
 
   public newGame(): void {}
 

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { IGrid } from '../../interfaces/index';
 
 @Component({
   selector: 'grid',
@@ -7,5 +8,6 @@ import { Component, Input } from '@angular/core';
 })
 
 export class GridComponent {
-  @Input public gameSize:string;
+  @Input() size: number;
+  @Input() grid: IGrid[];
 }
