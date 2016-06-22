@@ -20,8 +20,10 @@
 
   <!-- 2. Configure SystemJS -->
   <script>
-    System.import('assets/main.scss!').then(function(css){injectCSS(css);});
-    System.import('app/boot').then(null, console.error.bind(console));
+    System.import('assets/main.scss!').then(function(css){
+      injectCSS(css);
+      return System.import('app/boot');
+    }).then(null, console.error.bind(console));
   </script>
 </head>
 

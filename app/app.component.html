@@ -4,12 +4,15 @@
     <div id="heading" class="row">
       <h1 class="title">ng-2048</h1>
       <div class="scores-container">
+        <div class="score-container">{{game.currentScore}}</div>
+        <div class="best-container">{{game.highScore}}</div>
       </div>
     </div>
 
     <!-- instructions -->
     <div id="instructions" class="row">
       Join the numbers and get to the <strong>2048</strong> tile!
+      <button (click)="newGame()" class="restart-button">New game</button>
     </div>
 
     <div id="game-container"></div>
