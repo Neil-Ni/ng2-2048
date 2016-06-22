@@ -4,8 +4,6 @@
   </div>
 
   <div class="tile-container">
-    <!--<div tile-->
-         <!--[title]='tile'-->
-         <!--ng-repeat='tile in ngModel.tiles track by $id(tile.id || $index)'></div>-->
+    <tile [tile]="tile" *ngFor="let tile of tiles"></tile>
   </div>
 </div>
