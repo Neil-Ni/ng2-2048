@@ -1,7 +1,7 @@
 <html>
 
 <head>
-  <title>Angular 2 QuickStart</title>
+  <title>ng2-2048</title>
 
   <!-- 1. Load libraries -->
   <script src="node_modules/es6-shim/es6-shim.min.js"></script>
@@ -15,10 +15,13 @@
 
   <script src="config.js"></script>
   <script src="app/systemjs.config.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <script src="injectcss.js"></script>
 
   <!-- 2. Configure SystemJS -->
   <script>
-    System.import('app/boot').then(null, console.error.bind(console));x
+    System.import('assets/main.scss!').then(function(css){injectCSS(css);});
+    System.import('app/boot').then(null, console.error.bind(console));
   </script>
 </head>
 
