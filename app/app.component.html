@@ -2,8 +2,8 @@
   <div class="heading">
     <h1 class="title">2048</h1>
     <div class="scores-container">
-      <div class="score-container">{{game.currentScore}}</div>
-      <div class="best-container">{{game.highScore}}</div>
+      <div class="score-container">{{ game.currentScore | async }}</div>
+      <div class="best-container">{{ game.highScore | async }}</div>
     </div>
   </div>
 
@@ -13,14 +13,7 @@
   </div>
 
   <div class="game-container">
-    <div class="game-message">
-      <p></p>
-      <div class="lower">
-        <a class="keep-playing-button">Keep going</a>
-        <a class="retry-button">Try again</a>
-      </div>
-    </div>
-
-    <grid [size]="game.gameSize" [grid]="game.grid" [tiles]="game.tiles"></grid>
+    <message [won]="game.won | async" *ngIf="game.gameOver | async"></message>
+    <grid [tiles]="game.tiles | async"></grid>
   </div>
 </div>

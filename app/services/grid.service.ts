@@ -1,23 +1,16 @@
 import { Injectable }   from '@angular/core';
-import { IGrid, ITile } from '../interfaces/index';
-import { IPosition } from '../interfaces/position';
-import { Tile } from '../models/tile';
+import { ITile }        from '../interfaces/index';
+import { IPosition }    from '../interfaces/position';
+import { Tile }         from '../models/tile';
+import { VECTORS }      from '../enums/index';
 
 @Injectable()
 export class GridService {
-  public grid: IGrid[];
   public tiles: ITile[];
   public size: number = 4;
   public startingTileNumber = 2;
-  vectors: any = {
-    'LEFT': { x: -1, y: 0 },
-    'RIGHT': { x: 1, y: 0 },
-    'UP': { x: 0, y: -1 },
-    'DOWN': { x: 0, y: 1 }
-  };
 
   constructor() {
-    this.grid   = [];
     this.tiles  = [];
   }
 
@@ -26,10 +19,6 @@ export class GridService {
   }
   
   buildEmptyGameBoard(): void {
-    for (var x = 0; x < this.size * this.size; x++) {
-      this.grid[x] = null;
-    }
-
     this.forEach((x,y) => this.setCellAt({x:x,y:y}, null))
   }
 
@@ -43,7 +32,7 @@ export class GridService {
   };
   
   traversalDirections(key: string): any {
-    var vector = this.vectors[key];
+    var vector = VECTORS[key];
     var positions = {x: [], y: []};
     for (var x = 0; x < this.size; x++) {
       positions.x.push(x);
@@ -61,7 +50,7 @@ export class GridService {
   };
 
   calculateNextPosition(cell, key: string): any {
-    var vector = this.vectors[key];
+    var vector = VECTORS[key];
     var previous;
   
     do {
@@ -104,9 +93,9 @@ export class GridService {
       var tile = this.tiles[i];
   
       if (tile) {
-        // Check all vectors
-        for (var vectorName in this.vectors) {
-          var vector = this.vectors[vectorName];
+        // Check all VECTORS
+        for (var vectorName in VECTORS) {
+          var vector = VECTORS[vectorName];
           var cell = { x: pos.x + vector.x, y: pos.y + vector.y };
           var other = this.getCellAt(cell);
           if (other && other.value === tile.value) {

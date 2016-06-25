@@ -15,6 +15,8 @@
     "@angular/core": "^2.0.0-rc.1",
     "@angular/platform-browser": "^2.0.0-rc.1",
     "@angular/platform-browser-dynamic": "^2.0.0-rc.1",
+    "@ngrx/core": "^1.0.1",
+    "@ngrx/store": "^2.0.1",
     "bootstrap-sass": "^3.3.6",
     "es6-shim": "0.35.0",
     "reflect-metadata": "0.1.2",
@@ -25,7 +27,9 @@
   },
   "devDependencies": {
     "concurrently": "2.0.0",
+    "gulp": "^3.9.1",
     "lite-server": "2.2.0",
+    "systemjs-builder": "^0.15.23",
     "typescript": "1.8.10"
   },
   "jspm": {

@@ -1,44 +1,42 @@
-import { Injectable }   from '@angular/core';
-import { GridService }  from './grid.service';
-import { IGrid, ITile } from '../interfaces/index';
+import { Injectable, Inject }   from '@angular/core';
+import { GridService }    from './grid.service';
+import { ITile }          from '../interfaces/index';
+import { Store, Action }  from '@ngrx/store';
+import { IGame }          from './game.reducer';
+import { GameAction }     from './game.action';
+import { Observable }     from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class GameService {
-  public currentScore: number  = 0;
-  public win: boolean          = false;
-  public gameOver: boolean     = false;
-  public grid: IGrid[];
-  public tiles: ITile[];
-  public gameSize: number      = 0;
+  public currentScore: Observable<number>;
+  public highScore:    Observable<number>;
+  public tiles:        Observable<ITile[]>;
+  public gameOver:     Observable<boolean>;
+  public won:          Observable<boolean>;
   private winningValue: number = 2048;
   private gridService: GridService;
 
-  constructor(private gridService: GridService) {
-    this.gameSize = this.gridService.getSize();
-  }
-
-  get grid(): IGrid[] {
-    return this.gridService.grid || [];
-  }
-
-  get tiles(): IGrid[] {
-    return this.gridService.tiles || [];
-  }
-
-  reset() {
-    this.gameOver = false;
-    this.win = false;
-    this.currentScore = 0;
+  constructor(
+    private gridService: GridService,
+    private store: Store<any>
+  ) {
+    const store$ = store.select<IGame>('game');
+    this.currentScore = store$.map(({currentScore}: IGame) => currentScore);
+    this.highScore = store$.map(({highScore}: IGame) => highScore);
+    this.tiles = store$.map(({tiles}: IGame) => tiles);
+    this.gameOver = store$.map(({gameOver}: IGame) => gameOver);
+    this.won = store$.map(({won}: IGame) => won);
   }
 
   newGame() {
     this.gridService.buildEmptyGameBoard();
     this.gridService.buildStartingPosition();
-    this.reset();
+    this.store.dispatch({type: GameAction.START, payload: this.gridService.tiles});
   };
   
   move(key: string): boolean {
-    if(this.win) { return false; }
+    if(this.store._value.game.won && !this.store._value.game.keepPlaying) { return false; }
     var positions = this.gridService.traversalDirections(key);
     var hasMoved = false;
     var hasWon = false;
@@ -70,7 +68,7 @@ export class GameService {
 
             this.gridService.moveTile(merged, next);
 
-            this.updateScore(this.currentScore + cell.next.value);
+            this.updateScore(cell.next.value);
 
             if(merged.value >= this.winningValue) {
               hasWon = true;
@@ -87,15 +85,16 @@ export class GameService {
       });
     });
 
-    if (hasWon && !this.win) {
-      this.win = true;
-    }
-
     if (hasMoved) {
       this.gridService.randomlyInsertNewTile();
+      this.store.dispatch({type: GameAction.MOVE, payload: this.gridService.tiles});
 
-      if (this.win || !this.movesAvailable()) {
-        this.gameOver = true;
+      if (hasWon) {
+        this.store.dispatch({type: GameAction.WIN});
+      }
+
+      if (!this.movesAvailable()) {
+        this.store.dispatch({type: GameAction.GAMEOVER});
       }
     }
   }
@@ -104,18 +103,11 @@ export class GameService {
     return this.gridService.anyCellsAvailable() || this.gridService.tileMatchesAvailable();
   };
 
-  get highScore(): number {
-    return parseInt(localStorage.getItem('highScore')) || 0;
-  }
-
-  set highScore(newScore: number) {
-    localStorage.setItem('highScore', newScore.toString());
-  }
-
-  updateScore(newScore: number) {
-    this.currentScore = newScore;
-    if(this.currentScore > this.highScore) {
-      this.highScore = newScore;
-    }
+  updateScore(newAdditionalScore: number) {
+    this.store.dispatch({type: GameAction.UPDATE_SCORE, payload: newAdditionalScore});
   };
+
+  keepGoing() {
+    this.store.dispatch({type: GameAction.CONTINUE});
+  }
 }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IGrid, ITile }  from '../../interfaces/index';
+import { ITile }  from '../../interfaces/index';
 import { TileComponent } from '../tile/tile.component';
 
 @Component({
@@ -9,7 +9,5 @@ import { TileComponent } from '../tile/tile.component';
 })
 
 export class GridComponent {
-  @Input() size: number;
-  @Input() grid: IGrid[];
   @Input() tiles: ITile[];
 }
