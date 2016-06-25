@@ -5,7 +5,7 @@ import { TileComponent } from '../tile/tile.component';
 @Component({
   selector: 'grid',
   directives: [TileComponent],
-  templateUrl: 'app/components/grid/grid.component.html'
+  templateUrl: 'components/grid/grid.component.html'
 })
 
 export class GridComponent {

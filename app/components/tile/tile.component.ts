@@ -3,7 +3,7 @@ import { ITile } from '../../interfaces/index';
 
 @Component({
   selector: 'tile',
-  templateUrl: 'app/components/tile/tile.component.html'
+  templateUrl: 'components/tile/tile.component.html'
 })
 
 export class TileComponent {

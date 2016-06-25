@@ -6,7 +6,7 @@ import { MessageComponent }        from './components/message/message.component'
 @Component({
   selector: 'my-app',
   directives: [GridComponent, MessageComponent],
-  templateUrl: 'app/app.component.html'
+  templateUrl: './app.component.html'
 })
 
 export class AppComponent {

@@ -1,0 +1,6 @@
+<div *ngIf='tile' class="tile position-{{ tile.x }}-{{ tile.y }} tile-{{ tile.value }}"
+     [class.tile-merged]="tile.merged">
+  <div class="tile-inner">
+    {{ tile.value }}
+  </div>
+</div>
