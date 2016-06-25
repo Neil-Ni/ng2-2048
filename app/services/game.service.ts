@@ -14,7 +14,6 @@ export class GameService {
   public tiles:        Observable<ITile[]>;
   public gameOver:     Observable<boolean>;
   public won:          Observable<boolean>;
-  private winningValue: number = 2048;
   private gridService: GridService;
 
   constructor(
@@ -70,9 +69,6 @@ export class GameService {
 
             this.updateScore(cell.next.value);
 
-            if(merged.value >= this.winningValue) {
-              hasWon = true;
-            }
             hasMoved = true; // we moved with a merge
           } else {
             this.gridService.moveTile(tile, cell.newPosition);
@@ -88,10 +84,6 @@ export class GameService {
     if (hasMoved) {
       this.gridService.randomlyInsertNewTile();
       this.store.dispatch({type: GameAction.MOVE, payload: this.gridService.tiles});
-
-      if (hasWon) {
-        this.store.dispatch({type: GameAction.WIN});
-      }
 
       if (!this.movesAvailable()) {
         this.store.dispatch({type: GameAction.GAMEOVER});

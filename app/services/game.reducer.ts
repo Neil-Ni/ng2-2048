@@ -8,6 +8,7 @@ export interface IGame {
   keepPlaying: boolean;
   won: boolean;
   gameOver: boolean;
+  winningValue: number;
   tiles: ITile[];
 }
 
@@ -17,6 +18,7 @@ let initialState: IGame = {
   keepPlaying: false,
   won: false,
   gameOver: false,
+  winningValue: 2048,
   tiles: []
 };
 
@@ -30,11 +32,13 @@ export const gameReducer: Reducer<any> = (state = initialState, action: Action) 
       return Object.assign({}, state, { tiles: action.payload });
     case GameAction.UPDATE_SCORE:
       let currentScore = state.currentScore + action.payload;
+      let won = currentScore > state.winningValue;
+      let gameOver = won && !state.keepPlaying;
       if (currentScore < state.highScore) {
-        return Object.assign({}, state, { currentScore: currentScore });
+        return Object.assign({}, state, { currentScore: currentScore, gameOver: gameOver, won: won });
       } else {
         localStorage.setItem('highScore', currentScore.toString());
-        return Object.assign({}, state, { currentScore: currentScore, highScore: currentScore });
+        return Object.assign({}, state, { currentScore: currentScore, highScore: currentScore, gameOver: gameOver, won: won });
       }
     case GameAction.CONTINUE:
       return Object.assign({}, state, { gameOver: false, keepPlaying: true });
