@@ -10,10 +10,10 @@ export class GridService {
   public size: number = 4;
   public startingTileNumber = 2;
   vectors: any = {
-    'left': { x: -1, y: 0 },
-    'right': { x: 1, y: 0 },
-    'up': { x: 0, y: -1 },
-    'down': { x: 0, y: 1 }
+    'LEFT': { x: -1, y: 0 },
+    'RIGHT': { x: 1, y: 0 },
+    'UP': { x: 0, y: -1 },
+    'DOWN': { x: 0, y: 1 }
   };
 
   constructor() {
@@ -60,7 +60,7 @@ export class GridService {
     return positions;
   };
 
-  calculateNextPosition(cell, key): any {
+  calculateNextPosition(cell, key: string): any {
     var vector = this.vectors[key];
     var previous;
   
@@ -118,7 +118,7 @@ export class GridService {
     return false;
   };
 
-  getCellAt = function(pos): void {
+  getCellAt(pos): ITile {
     if (this.withinGrid(pos)) {
       var x = this._coordinatesToPosition(pos);
       return this.tiles[x];

@@ -16,17 +16,20 @@ enum Directions {
 })
 
 export class AppComponent {
-  constructor(public game :GameService) {
+  constructor(public game: GameService) {
     this.game.newGame();
   }
 
-  public newGame(): void {}
+  public newGame(): void {
+    this.game.newGame();
+  }
 
   @HostListener('window:keydown', ['$event'])
   public onKeydown(event: KeyboardEvent): void {
     var key = Directions[event.which];
     if (key) {
       event.preventDefault();
+      this.game.move(key);
     }
   }
 }
