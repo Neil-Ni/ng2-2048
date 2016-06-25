@@ -1,20 +1,26 @@
 <div class="container">
-  <div id="content">
-    <div id="heading" class="row">
-      <h1 class="title">ng-2048</h1>
-      <div class="scores-container">
-        <div class="score-container">{{game.currentScore}}</div>
-        <div class="best-container">{{game.highScore}}</div>
+  <div class="heading">
+    <h1 class="title">2048</h1>
+    <div class="scores-container">
+      <div class="score-container">{{game.currentScore}}</div>
+      <div class="best-container">{{game.highScore}}</div>
+    </div>
+  </div>
+
+  <div class="above-game">
+    <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong></p>
+    <button (click)="newGame()" class="restart-button">New game</button>
+  </div>
+
+  <div class="game-container">
+    <div class="game-message">
+      <p></p>
+      <div class="lower">
+        <a class="keep-playing-button">Keep going</a>
+        <a class="retry-button">Try again</a>
       </div>
     </div>
 
-    <div id="instructions" class="row">
-      Join the numbers and get to the <strong>2048</strong> tile!
-      <button (click)="newGame()" class="restart-button">New game</button>
-    </div>
-
-    <div id="game-container">
-      <grid [size]="game.gameSize" [grid]="game.grid" [tiles]="game.tiles"></grid>
-    </div>
+    <grid [size]="game.gameSize" [grid]="game.grid" [tiles]="game.tiles"></grid>
   </div>
 </div>

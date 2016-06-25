@@ -1,9 +1,14 @@
-<div id="game-{{ size }}">
-  <div class="grid-container">
-    <div class="grid-cell" *ngFor="let cell of grid"></div>
+<div class="grid-container">
+  <div class="grid-row">
+    <tile class="grid-cell" [tile]="tile" *ngFor="let tile of tiles.slice(0, 4)"></tile>
   </div>
-
-  <div class="tile-container">
-    <tile [tile]="tile" *ngFor="let tile of tiles"></tile>
+  <div class="grid-row">
+    <tile class="grid-cell" [tile]="tile" *ngFor="let tile of tiles.slice(4, 8)"></tile>
+  </div>
+  <div class="grid-row">
+    <tile class="grid-cell" [tile]="tile" *ngFor="let tile of tiles.slice(8, 12)"></tile>
+  </div>
+  <div class="grid-row">
+    <tile class="grid-cell" [tile]="tile" *ngFor="let tile of tiles.slice(12, 16)"></tile>
   </div>
 </div>
