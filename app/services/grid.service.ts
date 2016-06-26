@@ -1,12 +1,15 @@
 import { Injectable }   from '@angular/core';
-import { ITile }        from '../interfaces/index';
-import { IPosition }    from '../interfaces/position';
+import {
+  IPosition,
+  IGridPositions,
+  IGridPositionTransition
+} from '../interfaces/index';
 import { Tile }         from '../models/tile';
 import { VECTORS }      from '../enums/index';
 
 @Injectable()
 export class GridService {
-  public tiles: ITile[];
+  public tiles: Tile[];
   public size: number = 4;
   public startingTileNumber = 2;
 
@@ -17,13 +20,13 @@ export class GridService {
   getSize(): number {
     return this.size;
   }
-  
+
   buildEmptyGameBoard(): void {
-    this.forEach((x,y) => this.setCellAt({x:x,y:y}, null))
+    this.forEach((x: number,y: number) => this.setCellAt({x: x,y: y}, null))
   }
 
   prepareTiles(): void {
-    this.forEach((x,y,tile) => {
+    this.forEach((x: number,y: number, tile: Tile) => {
       if (tile) {
         tile.savePosition();
         tile.reset();
@@ -31,9 +34,9 @@ export class GridService {
     })
   };
   
-  traversalDirections(key: string): any {
-    var vector = VECTORS[key];
-    var positions = {x: [], y: []};
+  traversalDirections(key: string): IGridPositions {
+    var vector: IPosition = VECTORS[key];
+    var positions = <IGridPositions>{x: [], y: []};
     for (var x = 0; x < this.size; x++) {
       positions.x.push(x);
       positions.y.push(x);
@@ -49,17 +52,17 @@ export class GridService {
     return positions;
   };
 
-  calculateNextPosition(cell, key: string): any {
-    var vector = VECTORS[key];
-    var previous;
-  
+  calculateNextPosition(cell: IPosition, key: string): IGridPositionTransition {
+    let vector: IPosition = VECTORS[key];
+    let previous: IPosition = null;
+
     do {
       previous = cell;
       cell = {
         x: previous.x + vector.x,
         y: previous.y + vector.y
       };
-    } while (this.withinGrid(cell) && this.cellAvailable(cell));
+    } while (this.cellAvailable(cell));
   
     return {
       newPosition: previous,
@@ -67,19 +70,19 @@ export class GridService {
     };
   };
   
-  withinGrid(cell): any {
+  withinGrid(cell: IPosition): boolean {
     return cell.x >= 0 && cell.x < this.size &&
       cell.y >= 0 && cell.y < this.size;
   };
 
-  cellAvailable(cell): any {
+  cellAvailable(cell: IPosition): boolean {
     if (this.withinGrid(cell)) {
       return !this.getCellAt(cell);
     } else {
-      return null;
+      return false;
     }
   };
-  
+
   buildStartingPosition(): void {
     for (var x = 0; x < this.startingTileNumber; x++) {
       this.randomlyInsertNewTile();
@@ -95,8 +98,8 @@ export class GridService {
       if (tile) {
         // Check all VECTORS
         for (var vectorName in VECTORS) {
-          var vector = VECTORS[vectorName];
-          var cell = { x: pos.x + vector.x, y: pos.y + vector.y };
+          var vector: IPosition = VECTORS[vectorName];
+          var cell: IPosition = { x: pos.x + vector.x, y: pos.y + vector.y };
           var other = this.getCellAt(cell);
           if (other && other.value === tile.value) {
             return true;
@@ -107,7 +110,7 @@ export class GridService {
     return false;
   };
 
-  getCellAt(pos): ITile {
+  getCellAt(pos: IPosition): Tile {
     if (this.withinGrid(pos)) {
       var x = this._coordinatesToPosition(pos);
       return this.tiles[x];
@@ -115,87 +118,77 @@ export class GridService {
       return null;
     }
   };
-  
-  setCellAt(pos, tile): void {
+
+  setCellAt(pos: IPosition, tile: Tile): void {
     if (this.withinGrid(pos)) {
       var xPos = this._coordinatesToPosition(pos);
       this.tiles[xPos] = tile;
     }
   };
 
-  moveTile(tile, newPosition): void {
-    var oldPos = {
-      x: tile.x,
-      y: tile.y
-    };
-  
-    this.setCellAt(oldPos, null);
+  moveTile(tile: Tile, newPosition: IPosition): void {
+    this.setCellAt(tile.position, null);
     this.setCellAt(newPosition, tile);
-  
+
     tile.updatePosition(newPosition);
   };
 
-  forEach(cb) {
-    var totalSize = this.size * this.size;
-    for (var i = 0; i < totalSize; i++) {
-      var pos = this._positionToCoordinates(i);
+  forEach(cb: any): void {
+    let totalSize = this.size * this.size;
+    for (let i = 0; i < totalSize; i++) {
+      let pos = this._positionToCoordinates(i);
       cb(pos.x, pos.y, this.tiles[i]);
     }
   };
 
-  _positionToCoordinates(i) {
-    var x = i % this.size,
-      y = (i - x) / this.size;
+  _positionToCoordinates(i: number): IPosition {
+    let x = i % this.size;
+    let y = (i - x) / this.size;
     return {
       x: x,
       y: y
     };
   };
 
-  _coordinatesToPosition(pos) {
+  _coordinatesToPosition(pos: IPosition): number {
     return (pos.y * this.size) + pos.x;
   };
 
-  insertTile(tile) {
+  insertTile(tile: Tile) {
     var pos = this._coordinatesToPosition(tile);
     this.tiles[pos] = tile;
   };
 
-  newTile(pos, value) {
-    return new Tile(pos, value);
+  removeTile(pos: IPosition) {
+    let index = this._coordinatesToPosition(pos);
+    delete this.tiles[index];
   };
 
-  removeTile(pos) {
-    pos = this._coordinatesToPosition(pos);
-    delete this.tiles[pos];
-  };
-
-  samePositions(a, b) {
+  samePositions(a: IPosition, b: IPosition): boolean {
     return a.x === b.x && a.y === b.y;
   };
 
-  availableCells() {
-    var cells = [],
-      self = this;
-  
-    this.forEach(function(x,y) {
-      var foundTile = self.getCellAt({x:x, y:y});
+  availableCells(): IPosition[] {
+    let cells: IPosition[] = [];
+
+    this.forEach((x: number,y: number) => {
+      let foundTile = this.getCellAt({x: x, y: y});
       if (!foundTile) {
-        cells.push({x:x,y:y});
+        cells.push({x: x,y: y});
       }
     });
-  
+
     return cells;
   };
 
   randomlyInsertNewTile() {
-    var cell = this.randomAvailableCell(),
-      tile = this.newTile(cell, 2);
+    let cell = this.randomAvailableCell();
+    let tile = new Tile(cell, 2);
     this.insertTile(tile);
   };
 
-  randomAvailableCell() {
-    var cells = this.availableCells();
+  randomAvailableCell(): IPosition {
+    let cells: IPosition[] = this.availableCells();
     if (cells.length > 0) {
       return cells[Math.floor(Math.random() * cells.length)];
     }

@@ -24,8 +24,6 @@ let initialState: IGame = {
 
 export const gameReducer: Reducer<any> = (state = initialState, action: Action) => {
   switch (action.type) {
-    case GameAction.INIT:
-      return Object.assign({}, state, { tiles: action.payload });
     case GameAction.START:
       return Object.assign({}, state, { gameOver: false, won: false, currentScore: 0, keepPlaying: false, tiles: action.payload });
     case GameAction.MOVE:

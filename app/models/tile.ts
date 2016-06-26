@@ -18,6 +18,10 @@ export class Tile implements ITile {
     this.merged = null;
   }
 
+  get position(): IPosition {
+    return <IPosition>{x: this.x, y: this.y};
+  }
+
   savePosition(): void {
     this.originalX = this.x;
     this.originalY = this.y;
@@ -28,10 +32,9 @@ export class Tile implements ITile {
   }
 
   setMergedBy(arr: Tile[]): void {
-    var self = this;
-    arr.forEach(function(tile) {
+    arr.forEach((tile: Tile) => {
       tile.merged = true;
-      tile.updatePosition(self.getPosition());
+      tile.updatePosition(this.position);
     });
   };
 
@@ -42,9 +45,5 @@ export class Tile implements ITile {
   updatePosition(newPosition: IPosition) {
     this.x = newPosition.x;
     this.y = newPosition.y;
-  };
-
-  getPosition(): IPosition {
-    return <IPosition>{x: this.x, y: this.y};
   };
 }

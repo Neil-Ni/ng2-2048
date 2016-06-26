@@ -21,7 +21,7 @@ export class SeedConfig {
 
   BOOTSTRAP_MODULE     = 'boot';
 
-  APP_TITLE            = 'My Angular2 App';
+  APP_TITLE            = 'ng2-2048';
 
   APP_SRC              = 'app';
   ASSETS_SRC           = `${this.APP_SRC}/assets`;
