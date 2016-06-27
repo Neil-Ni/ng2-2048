@@ -1,8 +1,0 @@
-<div class="game-message" [class.game-won]="won" [class.game-over]="!won">
-  <p *ngIf="won">You win!</p>
-  <p *ngIf="!won">Game over!</p>
-  <div class="lower">
-    <a class="keep-playing-button" (click)="keepGoing()">Keep going</a>
-    <a class="retry-button" (click)="restart()">Try again</a>
-  </div>
-</div>
