@@ -1,6 +1,8 @@
-export enum VECTORS {
-  LEFT  = { x: -1, y: 0 },
-  RIGHT = { x: 1, y: 0 },
-  UP    = { x: 0, y: -1 },
-  DOWN  = { x: 0, y: 1 }
-}
+import { IPosition } from '../interfaces/index';
+
+export const VECTORS = {
+  LEFT:  <IPosition>{ x: -1, y: 0 },
+  RIGHT: <IPosition>{ x: 1, y: 0 },
+  UP:    <IPosition>{ x: 0, y: -1 },
+  DOWN:  <IPosition>{ x: 0, y: 1 }
+};

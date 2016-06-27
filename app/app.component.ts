@@ -3,15 +3,16 @@ import { GameService }             from './services/game.service';
 import { GridComponent }           from './components/grid/grid.component';
 import { DIRECTIONS }              from './enums/index';
 import { MessageComponent }        from './components/message/message.component';
+
 @Component({
   selector: 'my-app',
   directives: [GridComponent, MessageComponent],
-  templateUrl: 'app/app.component.html'
+  templateUrl: './app.component.html'
 })
 
 export class AppComponent {
   constructor(public game: GameService) {
-    this.game.newGame();
+    this.newGame();
   }
 
   public newGame(): void {

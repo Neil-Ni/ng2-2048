@@ -34,3 +34,5 @@ jspm_packages
 app/**/*.js
 app/**/*.js.map
 typings
+
+dist
