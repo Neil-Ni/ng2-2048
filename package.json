@@ -4,7 +4,8 @@
   "scripts": {
     "postinstall": " ./node_modules/.bin/typings install",
     "build.prod": "gulp build.prod --color",
-    "start": "gulp serve.dev --color"
+    "start": "gulp serve.dev --color",
+    "gh-pages": "npm run build.prod && ./node_modules/.bin/gh-pages -d dist/prod"
   },
   "license": "MIT",
   "dependencies": {
@@ -30,6 +31,7 @@
     "concurrently": "2.0.0",
     "express": "~4.13.1",
     "express-history-api-fallback": "^2.0.0",
+    "gh-pages": "^0.11.0",
     "gulp": "^3.9.1",
     "gulp-cached": "^1.1.0",
     "gulp-concat": "^2.6.0",
