@@ -15,7 +15,7 @@ export class Tile implements ITile {
     this.y      = position.y;
     this.value  = value || 2;
     this.id = uniqueIdService.generate();
-    this.merged = null;
+    this.merged = false;
   }
 
   get position(): IPosition {
@@ -28,15 +28,8 @@ export class Tile implements ITile {
   }
 
   reset(): void {
-    this.merged = null
+    this.merged = false;
   }
-
-  setMergedBy(arr: Tile[]): void {
-    arr.forEach((tile: Tile) => {
-      tile.merged = true;
-      tile.updatePosition(this.position);
-    });
-  };
 
   updateValue(newVal: number) {
     this.value = newVal;

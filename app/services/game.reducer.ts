@@ -28,15 +28,17 @@ export const gameReducer: Reducer<any> = (state = initialState, action: Action) 
       return Object.assign({}, state, { gameOver: false, won: false, currentScore: 0, keepPlaying: false, tiles: action.payload });
     case GameAction.MOVE:
       return Object.assign({}, state, { tiles: action.payload });
+    case GameAction.UPDATE_HIGEST_TILE:
+      let won = action.payload >= state.winningValue;
+      let gameOver = won && !state.keepPlaying;
+      return Object.assign({}, state, { gameOver: gameOver, won: won });
     case GameAction.UPDATE_SCORE:
       let currentScore = state.currentScore + action.payload;
-      let won = currentScore > state.winningValue;
-      let gameOver = won && !state.keepPlaying;
       if (currentScore < state.highScore) {
-        return Object.assign({}, state, { currentScore: currentScore, gameOver: gameOver, won: won });
+        return Object.assign({}, state, { currentScore: currentScore });
       } else {
         localStorage.setItem('highScore', currentScore.toString());
-        return Object.assign({}, state, { currentScore: currentScore, highScore: currentScore, gameOver: gameOver, won: won });
+        return Object.assign({}, state, { currentScore: currentScore, highScore: currentScore });
       }
     case GameAction.CONTINUE:
       return Object.assign({}, state, { gameOver: false, keepPlaying: true });

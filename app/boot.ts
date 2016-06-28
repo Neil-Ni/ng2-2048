@@ -8,7 +8,7 @@ import { GridService }    from './services/grid.service';
 import { GameService }    from './services/game.service';
 import { APP_STORE }      from './services/index';
 
-enableProdMode();
+if ('<%= ENV %>' === 'prod') { enableProdMode(); }
 
 bootstrap(
   AppComponent, [

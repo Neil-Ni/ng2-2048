@@ -36,28 +36,31 @@ export class GameService {
   
   move(key: string): boolean {
     if(this.store._value.game.won && !this.store._value.game.keepPlaying) { return false; }
-    var positions = this.gridService.traversalDirections(key);
-    var hasMoved = false;
+    let positions = this.gridService.traversalDirections(key);
+    let hasMoved = false;
 
     this.gridService.prepareTiles();
 
     positions.x.forEach((x: number) => {
       positions.y.forEach((y: number) => {
-        var originalPosition: IPosition = {x: x,y: y};
-        var tile: Tile = this.gridService.getCellAt(originalPosition);
+        let originalPosition: IPosition = {x: x,y: y};
+        let tile: Tile = this.gridService.getCellAt(originalPosition);
 
         if (tile) {
           let cell = this.gridService.calculateNextPosition(tile, key);
           let next = cell.next;
 
           if (next && next.value === tile.value && !next.merged) {
-            var newValue = tile.value * 2;
-            var merged = new Tile(tile, newValue);
+            let newValue = tile.value * 2;
+            let merged = new Tile(tile, newValue);
+            merged.merged = true;
 
             this.gridService.insertTile(merged);
             this.gridService.removeTile(tile);
             this.gridService.moveTile(merged, next);
-            this.updateScore(cell.next.value);
+
+            this.store.dispatch({type: GameAction.UPDATE_SCORE, payload: cell.next.value});
+            this.store.dispatch({type: GameAction.UPDATE_HIGEST_TILE, payload: merged.value});
 
             hasMoved = true;
           } else {
@@ -83,10 +86,6 @@ export class GameService {
 
   movesAvailable(): boolean {
     return this.gridService.anyCellsAvailable() || this.gridService.tileMatchesAvailable();
-  };
-
-  updateScore(newAdditionalScore: number): void {
-    this.store.dispatch({type: GameAction.UPDATE_SCORE, payload: newAdditionalScore});
   };
 
   keepGoing(): void {
